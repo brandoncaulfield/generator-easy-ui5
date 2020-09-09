@@ -24,7 +24,8 @@ module.exports = class extends Generator {
       });
     }
 
-    var aPrompt = [{
+    var aPrompt = [
+    {
       type: "input",
       name: "modulename",
       message: "What is the name the module?",
@@ -44,7 +45,7 @@ module.exports = class extends Generator {
         }
         return "Please use alpha numeric characters only for the view name.";
       },
-      default: "MainView"
+      default: "MainViewxoxo"
     }, {
       type: "input",
       name: "tilename",
@@ -89,6 +90,7 @@ module.exports = class extends Generator {
     return this.prompt(aPrompt).then((answers) => {
 
       this.options.oneTimeConfig = this.config.getAll();
+      this.options.oneTimeConfig.singleWebApp = answers.singleWebApp;
       this.options.oneTimeConfig.viewname = answers.viewname;
       this.options.oneTimeConfig.modulename = answers.modulename;
       this.options.oneTimeConfig.tilename = answers.tilename;

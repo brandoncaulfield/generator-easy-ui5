@@ -7,6 +7,13 @@ module.exports = class extends Generator {
 
   prompting() {
     return this.prompt([{
+        type: "list",
+        name: "singleWebApp",
+        message: "Is this a single web app project?",
+        choices: ["Yes", "No"],
+        default: "Yes"
+      },
+      {
       type: "input",
       name: "projectname",
       message: "How do you want to name this project?",
