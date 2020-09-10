@@ -90,7 +90,6 @@ module.exports = class extends Generator {
     return this.prompt(aPrompt).then((answers) => {
 
       this.options.oneTimeConfig = this.config.getAll();
-      this.options.oneTimeConfig.singleWebApp = answers.singleWebApp;
       this.options.oneTimeConfig.viewname = answers.viewname;
       this.options.oneTimeConfig.modulename = answers.modulename;
       this.options.oneTimeConfig.tilename = answers.tilename;
@@ -109,6 +108,7 @@ module.exports = class extends Generator {
   }
 
   async writing() {
+    // *** //
     const sModuleName = this.options.oneTimeConfig.modulename;
     const localResources = (this.options.oneTimeConfig.ui5libs === "Local resources (OpenUI5)" || this.options.oneTimeConfig.ui5libs === "Local resources (SAPUI5)");
     const platformIsAppRouter = this.options.oneTimeConfig.platform.includes("Application Router");
@@ -121,7 +121,11 @@ module.exports = class extends Generator {
       nodir: true
     }).forEach((file) => {
       const sOrigin = this.templatePath(file);
-      const sTarget = this.destinationPath(file.replace("uimodule", sModuleName).replace(/\/_/, "/"));
+      // *** //
+      // if (this.config.get("singleWebApp") == 'Yes') {}
+      const sTarget = this.destinationPath(file.replace("uimodule", "").replace(/\/_/, "/"));
+      // const sTarget = this.destinationPath(file.replace("uimodule", sModuleName).replace(/\/_/, "/"));
+            
 
       const isUnneededFlpSandbox = sTarget.includes("flpSandbox") && this.options.oneTimeConfig.platform !== "Fiori Launchpad on Cloud Foundry";
       const isUnneededXsApp = sTarget.includes("xs-app") && !(this.options.oneTimeConfig.platform === "Fiori Launchpad on Cloud Foundry" || this.options.oneTimeConfig.platform === "Cloud Foundry HTML5 Application Repository");
@@ -133,6 +137,7 @@ module.exports = class extends Generator {
       this.fs.copyTpl(sOrigin, sTarget, this.options.oneTimeConfig);
     });
 
+    // TODO: same stuff here
     if (this.options.oneTimeConfig.platform.includes("Application Router")) {
       await fileaccess.manipulateJSON.call(this, "/approuter/xs-app.json", {
         "routes": [{
